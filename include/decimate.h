@@ -29,6 +29,29 @@
   /// @param[out] J  #G list of indices into F of birth face
   /// @param[out] I  #U list of indices into V of birth vertices
   /// @return true if m was reached (otherwise #G > m)
+  ///  
+  /// PSEUDOCODE:
+  ///      Q ← {}
+  ///      for each edge e
+  ///        cost[e], placement[e] ← cost_and_placement(e)
+  ///        Q.update( e, cost[e] )
+  ///      
+  ///      while Q not empty
+  ///         e ← Q.pop()
+  ///         if cost[e] is finite 
+  ///            collapse_happened_flag = false
+  ///            if pre_collapse( e ) 
+  ///              collapse_happened_flag = collapse_edge( e )
+  ///            post_collapse( e, collapse_happened_flag )
+  ///            if collapse_happened_flag
+  ///              for each neighbor edge f
+  ///                cost[f], placement[f] ← cost_and_placement(f)
+  ///                Q.update( f, cost[f] )
+  ///              if stopping_condition()
+  ///                break
+  ///            else
+  ///               cost[ e ] = ∞
+  ///                Q.update( e, cost[e] )
   ///
   bool decimate(
     const Eigen::MatrixXd & V,
