@@ -324,6 +324,7 @@ Read [Garland and Heckbert's original quadric error metric paper](https://www.cs
   - `igl::edge_flaps`
   - `igl::remove_unreferenced`
   - `igl::decimate_callback_types`
+  - `igl::min_heap`
 
 ### Black list
 
@@ -352,6 +353,10 @@ The output is:
 - a vector `J` that maps the indices of `G` into the corresponding index in `F` that the decimated face originated from; and
 - a vector `I` that maps the indices of `U` into the corresponding index in `V` that the decimated face originated from.
 
+You can either implement your own callback functions `decimate_cost_and_placement_callback`, `stopping_condition`, `pre_collapse`, and `post_collapse`, or you can use libigl's predefined interface.
+
+*Make sure to [explicitly instantiate your decimate.cpp function](https://en.cppreference.com/w/cpp/language/function_template#Explicit_instantiation) if you define your own callbacks - otherwise the C++ linker will not work correctly.*
+
 Read the definitions in `igl/decimate_callback_types.h` to see exactly how
 the callback functions should be specified.
 These callback functions require edge flap data as computed by libigl as input.
@@ -378,6 +383,8 @@ Be extremely careful to only return valid triangle meshes.
 It is easy to leave "junk" data lying around in your vertex list or face list
 because of operations during the collapsing phase that you did not properly
 clean up.
+
+Last, there is helpful pseudocode in `decimate.h` that tells you exactly how you can implement greedy edge collapse successfully in C++.
 
 ### `src/shortest_edge_collapse.cpp`
 
@@ -406,6 +413,15 @@ The output is:
 
 You can implement this function using your implementation of `decimate` by
 specifying the right `cost_and_placement`, `stopping_condition`, `pre_collapse`, and `post_collapse` functions.
+
+### But what if I don't want to use `decimate`?
+
+If you do not want to use the skeleton provided by `decimate` for creating a
+general greedy edge collapse decimation method, you do not have to.
+You can roll your own, or just write specialized versions of
+`shortest_edge_collapse` and `qslim` only.
+You will only be graded on whether `shortest_edge_collapse` and `qslim` work
+correctly.
 
 ### Hint
 
