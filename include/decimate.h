@@ -21,7 +21,7 @@
   ///     described in the pseudocode below with igl::min_heap to store the
   ///     edges to collapse.
   ///     libigl convention:
-  ///     cost_and_placement(V,F,E,EMAP,EF,EI,cost,placement);
+  ///     cost_and_placement(V,F,E,EMAP,EF,EI,cost,placement,e);
   /// @param[in] stopping_condition  function returning whether to stop collapsing edges
   ///     based on current state.
   ///     You can either implement your own, or use libigl's implementation

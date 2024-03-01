@@ -353,7 +353,8 @@ The output is:
 - a vector `J` that maps the indices of `G` into the corresponding index in `F` that the decimated face originated from; and
 - a vector `I` that maps the indices of `U` into the corresponding index in `V` that the decimated face originated from.
 
-You can either implement your own callback functions `decimate_cost_and_placement_callback`, `stopping_condition`, `pre_collapse`, and `post_collapse`, or you can use libigl's predefined interface.
+You can either implement your own callback functions `decimate_cost_and_placement_callback`, `stopping_condition`, `pre_collapse`, and `post_collapse`, or you can use libigl's predefined interface
+(take a look at [this example code](example-code/own-callback-function-example.cpp) for an example how to define your own callback functions with `std::function` and pass them to another function).
 
 *Make sure to [explicitly instantiate your decimate.cpp function](https://en.cppreference.com/w/cpp/language/function_template#Explicit_instantiation) if you define your own callbacks - otherwise the C++ linker will not work correctly.*
 
@@ -414,7 +415,7 @@ The output is:
 You can implement this function using your implementation of `decimate` by
 specifying the right `cost_and_placement`, `stopping_condition`, `pre_collapse`, and `post_collapse` functions.
 
-### But what if I don't want to use `decimate`?
+### But what if I do not want to use `decimate`?
 
 If you do not want to use the skeleton provided by `decimate` for creating a
 general greedy edge collapse decimation method, you do not have to.
@@ -424,6 +425,28 @@ You will only be graded on whether `shortest_edge_collapse` and `qslim` work
 correctly.
 
 ### Hint
+
+Start by just writing `shortest_edge_collapse` without worrying about `decimate`.
+Pretend you have not even heard about `decimate`, or an abstract greedy edge collapse.
+Just make sure that `shortest_edge_collapse` works.
+After that, use your code for `shortest_edge_collapse` to write `decimate`.
+Find the parts of your code specific for shortest edge collapse only, and
+abstract out the functions `decimate_cost_and_placement_callback`,
+`stopping_condition`, `pre_collapse`, and `post_collapse`.
+Now you can check whether your abstract `decimate` functions with the specific
+callback functions works correctly.
+Once all of this works, move on to write `qslim`.
+
+At first, do not worry about runtimes.
+Start by recomputing the collapse cost for every edge at each step, and by
+resizing the face matrix at each step.
+Get a basic version of the code working first.
+Once you have this, think about speed-ups.
+How can I use a min-heap to avoid recomputing the cost of every edge to find the
+next-cheapest edge every iteration?
+How can I mark certain faces as dead in `F`, so I can just ignore them during
+the next iterations instead of having to explicitly delete them from `F` and
+resize the matrix?
 
 Maybe more so than other exercises, the code you write in this exercise is
 extremely vulnerable to divisions by zero and other numerical corner cases.
