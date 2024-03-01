@@ -9,7 +9,7 @@
 #include <functional>
 
 template <typename callback_function>
-double addition_via_callback(int a, const double& b, callback_function add)
+double addition_via_callback(int a, const double& b, callback_function& add)
 {
   return add(a,b);
 }
@@ -25,4 +25,4 @@ int main()
   return addition_via_callback(a, b, add);
 }
 
-template double addition_via_callback<std::function<double(int, const double&)> >(int, const double&, std::function<double(int, const double&)>);
+template double addition_via_callback<std::function<double(int, const double&)> >(int, const double&, std::function<double(int, const double&)>&);
